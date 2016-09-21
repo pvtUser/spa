@@ -1,0 +1,25 @@
+{
+  "name": "spa",
+  "description": "spa",
+  "main": "index.js",
+  "authors": [
+    "Yury"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "spa"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "jquery": "^3.1.0",
+    "jquery-ui": "^1.12.1"
+  }
+}
