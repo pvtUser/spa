@@ -3,12 +3,12 @@ var mainBowerFiles = require('main-bower-files');
 var browserSync = require('browser-sync');
 var rigger = require('gulp-rigger');
 var del = require('del');
+var autoprefixer = require('gulp-autoprefixer');
 
 var config = {
     src: {
         main: "app/",
         js: "assets/js/",
-        css: "assets/css/",
         pages: "assets/pages/"
     },
     dest: {
@@ -25,7 +25,14 @@ gulp.task('mainfiles', function() {
         .pipe(gulp.dest(config.dest.main + config.dest.js))
 });
 
-
+gulp.task('autoprefixer', function () {
+    return gulp.src(config.src.css + 'app.css')
+        .pipe(autoprefixer({
+            browsers: ['last 10 versions'],
+            cascade: false
+        }))
+        .pipe(gulp.dest('dist/css'));
+});
 
 
 // дефолтная задача, если в консоли набрать gulp и нажать [enter] - запустится именно она. Можно переопределить.
@@ -94,7 +101,7 @@ gulp.task('clean', function() {
 
 // в случае изменения сущестующих или появления новых файлов - выполняем задачи js(вывод в консоль сообщения) и reload - перезапуск browser-sync 
 // аналогично по css и html
-gulp.task('watch', ['clean', 'browser-sync', 'js', 'css', 'html', 'rigger', 'mainfiles'], function() {
+gulp.task('watch', ['clean', 'browser-sync', 'js', 'css', 'html', 'rigger', 'mainfiles', 'autoprefixer'], function() {
     gulp.watch(config.src.main + config.src.js + '**/*.js', ['js', 'reload']);
     gulp.watch(config.src.main + config.src.css + '**/*.css', ['css', 'reload']);
     gulp.watch(config.src.main + '**/*.html', ['html', 'reload']);
