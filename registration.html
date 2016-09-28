@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=UTF-8>
+    <title>registration</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id='output'></div>
+    <form id='registration_form'>
+        <div class="form-group">
+            <label for="firstName">Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="Enter your name" name="firstName">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" placeholder="Enter your email" name="email">
+            <small class="form-text text-muted">Обязательное поле</small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+            <small class="form-text text-muted">Обязательное поле</small>
+        </div>
+        <button type="button" value="Submit" id='registration_button' class="btn btn-default">Submit</button>
+    </form>
+    <br>
+
+    <form id='login_form'>
+        <div class="form-group">
+            <label for="login_email">Email</label>
+            <input type='text' class="form-control" id='login_email' placeholder="Enter your email" name='login_email'>
+        </div>
+
+        <div class="form-group">
+            <label for="login_pass">Password</label>
+            <input type='password' class="form-control" id='login_pass' placeholder="Enter your password" name='login_pass'>
+        </div>
+
+        <button type="button" value="Submit" id='login_button' class="btn btn-default">Submit</button>
+    </form>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#registration_form').validate({ // initialize the plugin
+                submitHandler: function(form) {
+                    $('#registration_button').on('click', function() {
+                        var to_send = {
+                            "name": $('#firstName').val(),
+                            "email": $('#email').val(),
+                            "password": $('#password').val()
+                        };
+                        $.ajax({
+                            url: "https://api.backendless.com/v1/data/users",
+                            method: "POST",
+                            headers: {
+                                "application-id": "14469D9E-0DF1-09B9-FF27-2739263FE500",
+                                "secret-key": "CE9AA93B-E443-C9C8-FF9B-348911D65300"
+                            },
+                            contentType: "application/json",
+                            data: JSON.stringify(to_send),
+                            success: function() {
+                                $('#output').prepend('<div><strong>Вы успешно зарегистрировались!</strong></div>');
+                            },
+                            // error: function() {
+                            //     $('#output').prepend('<div><strong>Проверьте правильность введенных данных!</strong></div>');
+                            //}
+                        });
+                    });
+                },
+                rules: {
+                    firstName: {
+                        required: true,
+                        minlength: 4
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    firstName: {
+                        required: "Please enter a username",
+                        minlength: "Your username must consist of at least 4 characters"
+                    },
+                    email: "Please enter a valid email address",
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 6 characters long"
+                    }
+                }
+            });
+
+        });
+
+        // $('#registration_button').on('click', function() {
+        //     var to_send = {
+        //         "name": $('#firstName').val(),
+        //         "email": $('#email').val(),
+        //         "password": $('#password').val()
+        //     };
+        //     $.ajax({
+        //         url: "https://api.backendless.com/v1/data/users",
+        //         method: "POST",
+        //         headers: {
+        //             "application-id": "14469D9E-0DF1-09B9-FF27-2739263FE500",
+        //             "secret-key": "CE9AA93B-E443-C9C8-FF9B-348911D65300"
+        //         },
+        //         contentType: "application/json",
+        //         data: JSON.stringify(to_send),
+        //         success: function() {
+        //             $('#output').prepend('<div><strong>Вы успешно зарегистрировались!</strong></div>');
+        //         },
+        //         error: function() {
+        //             $('#output').prepend('<div><strong>Проверьте правильность введенных данных!</strong></div>');
+        //         }
+        //     });
+        // });
+
+        $('#login_button').on('click', function() {
+            var to_login = {
+                "login": $('#login_email').val(),
+                "password": $('#login_pass').val()
+            }
+            $.ajax({
+                url: "https://api.backendless.com/v1/users/login",
+                method: "POST",
+                headers: {
+                    "application-id": "14469D9E-0DF1-09B9-FF27-2739263FE500",
+                    "secret-key": "CE9AA93B-E443-C9C8-FF9B-348911D65300"
+                },
+                contentType: "application/json",
+                data: JSON.stringify(to_login),
+                success: function() {
+                    $('#output').prepend('<div><strong>Вы успешно залогинились!</strong></div>');
+                },
+                error: function() {
+                    $('#output').prepend('<div><strong>Проверьте правильность введенных данных!</strong></div>');
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>
