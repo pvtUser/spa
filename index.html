@@ -153,59 +153,6 @@
     </div>
 
     <script>
-      $(document).ready(function() {
-
-        // вешаем обработчик события клик, на наши кнопки
-        $('.nav-link').on('click', myFunc);
-
-        // получаем данные если есть hash;
-        window.location.hash ? $(window.location.hash).trigger('click') : false;
-      });
-
-      var myFunc = function() {
-
-        // удалем класс у всех элементов списка
-        $('.nav-item')
-          .removeClass('active');
-
-        // делаем активным пункт меню, по которому кликнули
-        $(this)
-          .parent().addClass('active');
-
-        getContent($(this).data('src')); // получаем данные
-      }
-
-
-      var getContent = function(src) {
-
-        $.ajax({
-          type: 'GET',
-          url: src,
-          dataType: 'html',
-          beforeSend: function() {
-            $('#preloader').show();
-          },
-          success: function(data) {
-
-            if (data) {
-
-              $('#result').html(data);
-
-            }
-            else {
-
-            }
-          },
-          error: function(xhr, ajaxOptions, thrownError) {
-            alert(xhr.status);
-            alert(thrownError);
-          },
-          complete: function() {
-            $('#preloader').hide();
-          }
-        })
-      }
-
       (function() {
         $.ajax({
           type: 'GET',
